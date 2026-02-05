@@ -1,0 +1,21 @@
+@startuml modelo
+skinparam classAttributeIconSize 0
+
+abstract class Cliente {
+    - id : int
+    - nombre : str
+    - email : str
+    - telefono : str
+    - direccion : str
+    + __str__()
+}
+
+class ClienteRegular
+class ClientePremium
+class ClienteCorporativo
+
+Cliente <|-- ClienteRegular
+Cliente <|-- ClientePremium
+Cliente <|-- ClienteCorporativo
+
+@enduml
