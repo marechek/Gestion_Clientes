@@ -98,6 +98,7 @@ Las operaciones del sistema generan registros en archivos de log.
 ---
 
 ## Estructura del proyecto
+```plaintext
 gestion_clientes/
 │
 ├── main.py
@@ -143,6 +144,8 @@ gestion_clientes/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+
+```
 
 ---
 
