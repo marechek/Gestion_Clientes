@@ -29,7 +29,7 @@ gestion_clientes/
 ├── docs/
 │ ├── poo_importancia.md
 │ └── uml/
-│ └── modelo.puml
+│   └── modelo.puml
 │
 ├── src/
 │ ├── domain/
