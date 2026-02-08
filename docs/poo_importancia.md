@@ -10,7 +10,7 @@ En este contexto, la Programación Orientada a Objetos (POO) se presenta como un
 
 ## 2. ¿Qué es la Programación Orientada a Objetos?
 
-La Programación Orientada a Objetos se basa en el uso de **objetos**, los cuales buscan representar elementos del mundo real dentro del sistema, tal como se ha visto en los ejemplos trabajados en clase.
+La Programación Orientada a Objetos se basa en el uso de **objetos**, los cuales buscan representar elementos del mundo real dentro del sistema.
 
 Cada objeto cuenta con:
 
@@ -27,7 +27,7 @@ Por ejemplo, un cliente puede tener atributos como nombre, correo electrónico y
 
 La encapsulación consiste en manejar los datos desde la propia clase, evitando que estos se modifiquen directamente desde fuera sin ningún tipo de control.
 
-Durante las prácticas se ha podido ver que centralizar validaciones dentro de la clase reduce errores y mejora el orden del código. Un ejemplo común es validar un correo electrónico dentro de la clase Cliente, en lugar de repetir esa validación en distintas partes del programa.
+Durante las prácticas hemos visto que centralizar validaciones dentro de la clase reduce errores y mejora el orden del código. Un ejemplo común es validar un correo electrónico dentro de la clase Cliente, en lugar de repetir esa validación en distintas partes del programa.
 
 ---
 
@@ -35,7 +35,7 @@ Durante las prácticas se ha podido ver que centralizar validaciones dentro de l
 
 La herencia permite crear nuevas clases a partir de una clase base, reutilizando atributos y métodos ya existentes.
 
-En ejercicios de gestión de clientes, se suele definir una clase Cliente general y luego crear subclases que heredan de ella. Esto evita duplicar código y hace más simple agregar nuevos tipos de clientes a medida que el sistema crece.
+Se suele definir una clase Cliente general y luego crear subclases que heredan de ella. Esto evita duplicar código y hace más simple agregar nuevos tipos de clientes a medida que el sistema crece.
 
 ---
 
@@ -43,7 +43,7 @@ En ejercicios de gestión de clientes, se suele definir una clase Cliente genera
 
 El polimorfismo permite que un mismo método tenga distintos comportamientos según el tipo de objeto que lo implemente.
 
-Por ejemplo, distintos tipos de clientes pueden calcular beneficios o descuentos de manera diferente utilizando el mismo método. Esto demuestra cómo el sistema puede adaptarse a nuevos requerimientos sin necesidad de modificar la estructura principal del código.
+Por ejemplo, distintos tipos de clientes pueden tener beneficios o calcular descuentos de manera diferente utilizando el mismo método. Esto demuestra cómo el sistema puede adaptarse a nuevos requerimientos sin necesidad de modificar la estructura principal del código.
 
 ---
 

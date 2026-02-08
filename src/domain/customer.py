@@ -1,8 +1,9 @@
+from abc import ABC, abstractmethod
 from src.utils.exceptions import RequiredFieldError
 from src.validators.customer_validator import CustomerValidator
 
 
-class Customer:
+class Customer(ABC):
     REQUIRED_FIELDS = ["customer_id", "name", "email", "phone", "address"]
 
     def __init__(self, **kwargs):
@@ -13,8 +14,6 @@ class Customer:
         self.customer_id = CustomerValidator.validate_customer_id(kwargs.get("customer_id"))
         self.name = CustomerValidator.validate_required_string(kwargs.get("name"), "name", min_len=1)
 
-        self.customer_type = (kwargs.get("customer_type") or "regular").strip().lower()
-        self.active = kwargs.get("active", True)
         self.email = kwargs.get("email")
         self.phone = kwargs.get("phone")
         self.address = kwargs.get("address")
@@ -43,18 +42,13 @@ class Customer:
     def address(self, value: str) -> None:
         self._address = CustomerValidator.validate_address(value)
 
+    @abstractmethod
+    def get_benefits(self) -> str:
+        pass
+
     def __str__(self) -> str:
-        return f"Customer(customer_id={self.customer_id}, name='{self.name}', email='{self.email}')"
+        return f"{self.__class__.__name__}(customer_id={self.customer_id}, name='{self.name}', email='{self.email}')"
 
     def __eq__(self, other) -> bool:
         return isinstance(other, Customer) and self.customer_id == other.customer_id
-    
-    def get_benefits(self) -> str:
-        ctype = (getattr(self, "customer_type", None) or "regular").strip().lower()
-
-        if ctype == "premium":
-            return "Cliente premium: beneficios premium."
-        if ctype == "corporate":
-            return "Cliente corporativo: beneficios corporativo."
-        return "Cliente sin beneficios adicionales."
 

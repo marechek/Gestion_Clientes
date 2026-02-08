@@ -3,6 +3,9 @@ from __future__ import annotations
 from typing import Any, Dict
 
 from src.domain.customer import Customer
+from src.domain.regular_customer import RegularCustomer
+from src.domain.premium_customer import PremiumCustomer
+from src.domain.corporate_customer import CorporateCustomer
 
 
 class CustomerMapper:
@@ -18,11 +21,20 @@ class CustomerMapper:
             "active": getattr(customer, "active", True),
         }
 
+    
     @staticmethod
     def from_dict(data: Dict[str, Any]) -> Customer:
-        return Customer(
+        customer_type = (data.get("customer_type") or "regular").strip().lower()
+
+        cls_map = {
+            "regular": RegularCustomer,
+            "premium": PremiumCustomer,
+            "corporate": CorporateCustomer,
+        }
+        cls = cls_map.get(customer_type, RegularCustomer)
+
+        return cls(
             customer_id=data.get("customer_id"),
-            customer_type=data.get("customer_type", "regular"),
             name=data.get("name"),
             email=data.get("email"),
             phone=data.get("phone"),

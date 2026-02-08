@@ -1,21 +1,89 @@
-@startuml modelo
+@startuml Gestion_Clientes_UML
+left to right direction
 skinparam classAttributeIconSize 0
 
-abstract class Cliente {
-    - id : int
-    - nombre : str
-    - email : str
-    - telefono : str
-    - direccion : str
-    + __str__()
+' =====================
+' Domain
+' =====================
+class Customer {
+  - customer_id : int
+  - name : str
+  - _email : str
+  - _phone : str
+  - _address : str
+  + get_benefits() : str
+  + __str__() : str
+  + __eq__(other) : bool
 }
 
-class ClienteRegular
-class ClientePremium
-class ClienteCorporativo
+class RegularCustomer
+class PremiumCustomer
+class CorporateCustomer
 
-Cliente <|-- ClienteRegular
-Cliente <|-- ClientePremium
-Cliente <|-- ClienteCorporativo
+Customer <|-- RegularCustomer
+Customer <|-- PremiumCustomer
+Customer <|-- CorporateCustomer
+
+' =====================
+' Validators / Utils
+' =====================
+class CustomerValidator {
+  + validate_email(email) : str
+  + validate_phone(phone) : str
+  + validate_address(address) : str
+  + validate_customer_id(customer_id) : int
+}
+
+class AppLogger {
+  + setup(log_file) : Logger
+}
+
+Customer ..> CustomerValidator : uses
+
+' =====================
+' Persistence / Mapping
+' =====================
+class CustomerJsonStorage {
+  - file_path : Path
+  + load() : dict
+  + save(data: dict) : void
+}
+
+class CustomerMapper {
+  + from_dict(data: dict) : Customer
+  + to_dict(customer: Customer) : dict
+}
+
+' =====================
+' Services
+' =====================
+class CustomerService {
+  - storage : CustomerJsonStorage
+  + list_customers() : list
+  + get_customer_by_id(customer_id:int) : Customer
+  + create_customer(...) : Customer
+  + update_customer(customer_id:int, **changes) : Customer
+  + delete_customer(customer_id:int) : bool
+
+  + create_customer_from_input(...) : Customer
+  + update_customer_from_input(...) : Customer
+  + delete_customer_from_input(...) : bool
+}
+
+CustomerService *-- CustomerJsonStorage : composition
+CustomerService ..> CustomerMapper : uses
+
+' =====================
+' UI
+' =====================
+class Menu {
+  - service : CustomerService
+  - logger : Logger
+  + run() : void
+}
+
+Menu ..> CustomerService : uses
+Menu ..> AppLogger : uses
 
 @enduml
+
