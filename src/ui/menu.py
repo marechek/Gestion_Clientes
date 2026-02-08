@@ -89,7 +89,16 @@ class Menu:
         try:
             raw_id = input("ID del cliente a editar: ").strip()
 
+            # Validar existencia antes de pedir más datos
+            customer = self.service.get_customer_by_id_from_input(raw_id)
+            if customer is None:
+                print("Cliente no encontrado. Volviendo al menú principal.")
+                self.logger.info(f"UPDATE_NOT_FOUND | input_id={raw_id}")
+                return
+
+            print(f"Cliente actual: {customer} | Beneficios: {customer.get_benefits()}")
             print("Deja en blanco para no modificar.")
+
             name = input("Nuevo nombre: ").strip() or None
             email = input("Nuevo email: ").strip() or None
             phone = input("Nuevo teléfono: ").strip() or None
@@ -110,11 +119,6 @@ class Menu:
                 address=address
             )
 
-            if updated is None:
-                print("Cliente no encontrado.")
-                self.logger.info(f"UPDATE_NOT_FOUND | input_id={raw_id}")
-                return
-
             print(f"Cliente actualizado: {updated}")
             print(updated.get_benefits())
             self.logger.info(f"UPDATE | customer_id={updated.customer_id}")
@@ -131,13 +135,27 @@ class Menu:
         try:
             raw_id = input("ID del cliente a eliminar: ").strip()
 
+            # Validar existencia antes de eliminar
+            customer = self.service.get_customer_by_id_from_input(raw_id)
+            if customer is None:
+                print("Cliente no encontrado. Volviendo al menú principal.")
+                self.logger.info(f"DELETE_NOT_FOUND | input_id={raw_id}")
+                return
+
+            print(f"Cliente a eliminar: {customer} | Beneficios: {customer.get_benefits()}")
+            confirm = input("¿Confirmas eliminación? (s/n): ").strip().lower()
+            if confirm != "s":
+                print("Eliminación cancelada. Volviendo al menú principal.")
+                self.logger.info(f"DELETE_CANCELLED | input_id={raw_id}")
+                return
+
             ok = self.service.delete_customer_from_input(raw_customer_id=raw_id)
             if ok:
                 print("Cliente eliminado.")
                 self.logger.info(f"DELETE | input_id={raw_id}")
             else:
-                print("Cliente no encontrado.")
-                self.logger.info(f"DELETE_NOT_FOUND | input_id={raw_id}")
+                print("Cliente no encontrado. Volviendo al menú principal.")
+                self.logger.info(f"DELETE_NOT_FOUND_AFTER_CHECK | input_id={raw_id}")
 
         except ValidationError as e:
             print(f"Error de validación: {e}")
@@ -146,4 +164,5 @@ class Menu:
         except DataAccessError as e:
             print(f"Error de persistencia: {e}")
             self.logger.error(f"DATA_ACCESS_ERROR_DELETE | {e}")
+
 

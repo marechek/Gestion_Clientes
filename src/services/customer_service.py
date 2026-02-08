@@ -7,7 +7,6 @@ class CustomerService:
     def __init__(self, storage: CustomerJsonStorage):
         self.storage = storage
 
-    # Normalizaciones (negocio)
     def _normalize_customer_type(self, raw_value: str) -> str:
         if raw_value is None:
             raise ValidationError("Tipo de cliente inválido.")
@@ -38,6 +37,14 @@ class CustomerService:
         if customer_id <= 0:
             raise ValidationError("ID inválido. Debe ser mayor a 0.")
         return customer_id
+
+    def get_customer_by_id_from_input(self, raw_customer_id: str):
+        customer_id = self._normalize_customer_id(raw_customer_id)
+        return self.get_customer_by_id(customer_id)
+
+    def exists_customer_from_input(self, raw_customer_id: str) -> bool:
+        customer = self.get_customer_by_id_from_input(raw_customer_id)
+        return customer is not None
 
     def create_customer_from_input(self, raw_customer_type: str, name: str, email: str, phone: str, address: str):
         customer_type = self._normalize_customer_type(raw_customer_type)
@@ -89,7 +96,7 @@ class CustomerService:
             "customer_type": (customer_type or "regular").lower(),
         }
 
-        customer_obj = CustomerMapper.from_dict(raw)  # valida y crea la subclase
+        customer_obj = CustomerMapper.from_dict(raw)
         data["customers"].append(CustomerMapper.to_dict(customer_obj))
         self.storage.save(data)
         return customer_obj
@@ -102,13 +109,11 @@ class CustomerService:
 
         current = data["customers"][idx]
 
-        # Solo permitimos actualizar estos campos
         allowed = {"name", "email", "phone", "address", "customer_type"}
         for k, v in changes.items():
             if k in allowed and v is not None:
                 current[k] = v
 
-        # Revalida reconstruyendo objeto (y convierte a subclase si cambió tipo)
         updated_obj = CustomerMapper.from_dict(current)
         data["customers"][idx] = CustomerMapper.to_dict(updated_obj)
         self.storage.save(data)
@@ -132,5 +137,3 @@ class CustomerService:
             if c.get("customer_id") == customer_id:
                 return i
         return None
-
-
