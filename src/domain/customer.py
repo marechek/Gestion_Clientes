@@ -13,6 +13,7 @@ class Customer(ABC):
 
         self.customer_id = CustomerValidator.validate_customer_id(kwargs.get("customer_id"))
         self.name = CustomerValidator.validate_required_string(kwargs.get("name"), "name", min_len=1)
+        self.customer_type = kwargs.get("customer_type", "regular")
 
         self.email = kwargs.get("email")
         self.phone = kwargs.get("phone")
