@@ -1,0 +1,146 @@
+@startuml customer_mgn.puml
+left to right direction
+skinparam classAttributeIconSize 0
+
+' =====================
+' Domain
+' =====================
+abstract class Customer {
+  {static} REQUIRED_FIELDS : list
+  - _email : str
+  - _phone : str
+  - _address : str
+  + customer_id : int
+  + name : str
+  + __init__(**kwargs)
+  + email : str
+  + phone : str
+  + address : str
+  + get_benefits() : str
+  + __str__() : str
+  + __eq__(other) : bool
+}
+
+class RegularCustomer {
+  + __init__(**kwargs)
+  + get_benefits() : str
+}
+class PremiumCustomer {
+  + __init__(**kwargs)
+  + get_benefits() : str
+}
+class CorporateCustomer {
+  + __init__(**kwargs)
+  + get_benefits() : str
+}
+
+Customer <|-- RegularCustomer
+Customer <|-- PremiumCustomer
+Customer <|-- CorporateCustomer
+
+Customer ..> CustomerValidator : uses
+
+' =====================
+' Validators
+' =====================
+class CustomerValidator {
+  {static} EMAIL_RE
+  + validate_required_string(value: str, field: str, min_len: int = 1) : str
+  + validate_email(email: str) : str
+  + validate_phone(phone: str) : str
+  + validate_address(address: str) : str
+  + validate_customer_id(customer_id) : int
+}
+
+' =====================
+' Logging
+' =====================
+class AppLogger {
+  + setup(log_file: str = "logs/app.log") : Logger
+}
+
+' =====================
+' Errors / Exceptions
+' =====================
+class AppError
+class ValidationError
+class RequiredFieldError
+class DataAccessError
+
+AppError <|-- ValidationError
+ValidationError <|-- RequiredFieldError
+AppError <|-- DataAccessError
+
+' =====================
+' Persistence / Mapping
+' =====================
+class CustomerJsonStorage {
+  + file_path : Path
+  + __init__(file_path: str)
+  + load() : dict
+  + save(data: dict) : void
+}
+
+class CustomerMapper {
+  + to_dict(customer: Customer) : dict
+  + from_dict(data: dict) : Customer
+}
+
+' =====================
+' Services
+' =====================
+class CustomerService {
+  + storage : CustomerJsonStorage
+  + __init__(storage: CustomerJsonStorage)
+
+  - _normalize_customer_type(raw_value: str) : str
+  - _normalize_customer_id(raw_value: str) : int
+  - _find_index_by_id(customers_list: list, customer_id: int)
+
+  + get_customer_by_id_from_input(raw_customer_id: str)
+  + exists_customer_from_input(raw_customer_id: str) : bool
+  + create_customer_from_input(raw_customer_type: str, name: str, email: str, phone: str, address: str)
+  + update_customer_from_input(raw_customer_id: str, raw_customer_type: str | None = None, **changes)
+  + delete_customer_from_input(raw_customer_id: str) : bool
+
+  + list_customers() : list
+  + get_customer_by_id(customer_id: int)
+  + create_customer(customer_type: str, name: str, email: str, phone: str, address: str)
+  + update_customer(customer_id: int, **changes)
+  + delete_customer(customer_id: int) : bool
+}
+
+CustomerService ..> CustomerMapper : uses
+CustomerService o-- CustomerJsonStorage : has-a
+
+' =====================
+' UI
+' =====================
+class Menu {
+  + service : CustomerService
+  + logger : Logger
+  + __init__(**kwargs)
+  + run() : void
+  - _print_menu() : void
+  - _create_customer() : void
+  - _list_customers() : void
+  - _update_customer() : void
+  - _delete_customer() : void
+}
+
+Menu ..> CustomerService : uses
+
+' =====================
+' Composition Root (main.py)
+' =====================
+class App {
+  + main() : void
+}
+
+App ..> AppLogger : uses
+App ..> CustomerJsonStorage : creates
+App ..> CustomerService : creates
+App ..> Menu : creates
+App ..> Logger : uses
+
+@enduml
