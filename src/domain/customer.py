@@ -46,4 +46,10 @@ class Customer:
 
     def __eq__(self, other) -> bool:
         return isinstance(other, Customer) and self.customer_id == other.customer_id
+    
+    def get_benefits(self) -> str:
+        """
+        Retorna una descripción de los beneficios del cliente.
+        """
+        return "Cliente sin beneficios adicionales."
 
