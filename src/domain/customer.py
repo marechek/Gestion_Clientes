@@ -1,11 +1,5 @@
 from src.utils.exceptions import RequiredFieldError
-from src.validators.customer_validators import (
-    validate_customer_id,
-    validate_required_string,
-    validate_email,
-    validate_phone,
-    validate_address,
-)
+from src.validators.customer_validator import CustomerValidator
 
 
 class Customer:
@@ -16,8 +10,8 @@ class Customer:
         if missing:
             raise RequiredFieldError(f"Faltan campos obligatorios: {', '.join(missing)}")
 
-        self.customer_id = validate_customer_id(kwargs.get("customer_id"))
-        self.name = validate_required_string(kwargs.get("name"), "name", min_len=1)
+        self.customer_id = CustomerValidator.validate_customer_id(kwargs.get("customer_id"))
+        self.name = CustomerValidator.validate_required_string(kwargs.get("name"), "name", min_len=1)
 
         self.email = kwargs.get("email")
         self.phone = kwargs.get("phone")
@@ -29,7 +23,7 @@ class Customer:
 
     @email.setter
     def email(self, value: str) -> None:
-        self._email = validate_email(value)
+        self._email = CustomerValidator.validate_email(value)
 
     @property
     def phone(self) -> str:
@@ -37,7 +31,7 @@ class Customer:
 
     @phone.setter
     def phone(self, value: str) -> None:
-        self._phone = validate_phone(value)
+        self._phone = CustomerValidator.validate_phone(value)
 
     @property
     def address(self) -> str:
@@ -45,10 +39,11 @@ class Customer:
 
     @address.setter
     def address(self, value: str) -> None:
-        self._address = validate_address(value)
+        self._address = CustomerValidator.validate_address(value)
 
     def __str__(self) -> str:
         return f"Customer(customer_id={self.customer_id}, name='{self.name}', email='{self.email}')"
 
     def __eq__(self, other) -> bool:
         return isinstance(other, Customer) and self.customer_id == other.customer_id
+
