@@ -259,7 +259,7 @@ El diseño adoptado cumple con los objetivos del proyecto y se alinea con buenas
 
 ## Autor
 
-Proyecto académico desarrollado como parte del **Módulo 4 – Programación Avanzada en Python**, en el marco de la **Actividad Basada en Proyectos (ABP 3)**.
+Proyecto académico desarrollado como parte del **Módulo 4 – Programación Avanzada en Python**, en el marco de la **Actividad Basada en Proyectos (ABP 4)**.
 
 El proyecto fue diseñado, desarrollado, probado y documentado íntegramente por **Marcos Elias**, aplicando los contenidos y buenas prácticas abordadas durante el módulo.
 
