@@ -13,6 +13,8 @@ class Customer:
         self.customer_id = CustomerValidator.validate_customer_id(kwargs.get("customer_id"))
         self.name = CustomerValidator.validate_required_string(kwargs.get("name"), "name", min_len=1)
 
+        self.customer_type = (kwargs.get("customer_type") or "regular").strip().lower()
+        self.active = kwargs.get("active", True)
         self.email = kwargs.get("email")
         self.phone = kwargs.get("phone")
         self.address = kwargs.get("address")
@@ -48,8 +50,11 @@ class Customer:
         return isinstance(other, Customer) and self.customer_id == other.customer_id
     
     def get_benefits(self) -> str:
-        """
-        Retorna una descripción de los beneficios del cliente.
-        """
+        ctype = (getattr(self, "customer_type", None) or "regular").strip().lower()
+
+        if ctype == "premium":
+            return "Cliente premium: beneficios premium."
+        if ctype == "corporate":
+            return "Cliente corporativo: beneficios corporativo."
         return "Cliente sin beneficios adicionales."
 
