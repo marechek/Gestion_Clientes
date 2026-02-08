@@ -144,6 +144,8 @@ gestion_clientes/
 ├── .gitignore
 └── README.md
 
+---
+
 ### Descripción general
 - **docs/**: documentación del proyecto (POO + UML).
 - **src/**: código fuente organizado por responsabilidades.
