@@ -7,6 +7,61 @@ class CustomerService:
     def __init__(self, storage: CustomerJsonStorage):
         self.storage = storage
 
+    # Normalizaciones (negocio)
+    def _normalize_customer_type(self, raw_value: str) -> str:
+        if raw_value is None:
+            raise ValidationError("Tipo de cliente inválido.")
+
+        value = raw_value.strip().lower()
+
+        mapping = {
+            "1": "regular",
+            "regular": "regular",
+            "2": "premium",
+            "premium": "premium",
+            "3": "corporate",
+            "corporate": "corporate",
+        }
+
+        customer_type = mapping.get(value)
+        if not customer_type:
+            raise ValidationError("Tipo de cliente inválido. Use 1/2/3 o regular/premium/corporate.")
+        return customer_type
+
+    def _normalize_customer_id(self, raw_value: str) -> int:
+        if raw_value is None:
+            raise ValidationError("ID inválido.")
+        value = raw_value.strip()
+        if not value.isdigit():
+            raise ValidationError("ID inválido. Debe ser un número.")
+        customer_id = int(value)
+        if customer_id <= 0:
+            raise ValidationError("ID inválido. Debe ser mayor a 0.")
+        return customer_id
+
+    def create_customer_from_input(self, raw_customer_type: str, name: str, email: str, phone: str, address: str):
+        customer_type = self._normalize_customer_type(raw_customer_type)
+        return self.create_customer(
+            customer_type=customer_type,
+            name=name,
+            email=email,
+            phone=phone,
+            address=address
+        )
+
+    def update_customer_from_input(self, raw_customer_id: str, raw_customer_type: str | None = None, **changes):
+        customer_id = self._normalize_customer_id(raw_customer_id)
+
+        if raw_customer_type is not None:
+            changes["customer_type"] = self._normalize_customer_type(raw_customer_type)
+
+        return self.update_customer(customer_id, **changes)
+
+    def delete_customer_from_input(self, raw_customer_id: str) -> bool:
+        customer_id = self._normalize_customer_id(raw_customer_id)
+        return self.delete_customer(customer_id)
+
+    # Operaciones con clientes
     def list_customers(self) -> list:
         data = self.storage.load()
         return [CustomerMapper.from_dict(c) for c in data["customers"]]
@@ -53,7 +108,7 @@ class CustomerService:
             if k in allowed and v is not None:
                 current[k] = v
 
-        # Revalida reconstruyendo objeto
+        # Revalida reconstruyendo objeto (y convierte a subclase si cambió tipo)
         updated_obj = CustomerMapper.from_dict(current)
         data["customers"][idx] = CustomerMapper.to_dict(updated_obj)
         self.storage.save(data)
@@ -77,4 +132,5 @@ class CustomerService:
             if c.get("customer_id") == customer_id:
                 return i
         return None
+
 
