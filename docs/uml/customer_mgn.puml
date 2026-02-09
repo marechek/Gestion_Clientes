@@ -108,6 +108,7 @@ class CustomerService {
   + create_customer(customer_type: str, name: str, email: str, phone: str, address: str)
   + update_customer(customer_id: int, **changes)
   + delete_customer(customer_id: int) : bool
+  + print_customers_report() : void
 }
 
 CustomerService ..> CustomerMapper : uses
@@ -123,7 +124,6 @@ class Menu {
   + run() : void
   - _print_menu() : void
   - _create_customer() : void
-  - _list_customers() : void
   - _update_customer() : void
   - _delete_customer() : void
 }
@@ -144,3 +144,4 @@ App ..> Menu : creates
 App ..> Logger : uses
 
 @enduml
+

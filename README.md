@@ -28,7 +28,7 @@ Desarrollar una plataforma en Python basada en POO que permita gestionar cliente
 
 ## Funcionalidades
 - Crear clientes.
-- Listar clientes registrados.
+- Listar clientes mediante **reporte tabular por consola**.
 - Editar clientes existentes.
 - Eliminar clientes.
 - Diferenciación de tipos de cliente:
@@ -68,6 +68,7 @@ Principales decisiones:
 - Separación clara por capas (dominio, validaciones, servicios, persistencia, UI).
 - Uso explícito de abstracción mediante clases base abstractas.
 - Persistencia basada en archivos JSON para priorizar simplicidad y portabilidad.
+- Implementación de un **reporte tabular por consola** en la capa de servicio (`CustomerService`), delegando la presentación a un único punto y evitando lógica condicional en la UI.
 - Separación clara entre la interfaz de usuario y la lógica de negocio, manteniendo en el servicio únicamente lógica de normalización necesaria para la validación de entradas provenientes de la UI.
 
 Estas decisiones permiten un sistema mantenible, extensible y fácil de comprender.
@@ -266,7 +267,7 @@ El proyecto fue diseñado, desarrollado, probado y documentado íntegramente por
 ---
 
 ## Posibles Mejoras Futuras
-- Incorporar una base de datos relacional o NoSQL para mayor escalabilidad.
+- Incorporar una base de datos relacional para mayor escalabilidad.
 - Exponer la lógica del sistema mediante una API REST.
 - Implementar autenticación y gestión de usuarios.
 - Agregar una interfaz gráfica o aplicación web.

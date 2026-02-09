@@ -37,6 +37,15 @@ class CustomerService:
         if customer_id <= 0:
             raise ValidationError("ID inválido. Debe ser mayor a 0.")
         return customer_id
+    
+    def _find_index_by_id(self, customers_list: list, customer_id: int):
+        if not isinstance(customer_id, int) or customer_id <= 0:
+            raise ValidationError("ID inválido.")
+
+        for i, c in enumerate(customers_list):
+            if c.get("customer_id") == customer_id:
+                return i
+        return None
 
     def get_customer_by_id_from_input(self, raw_customer_id: str):
         customer_id = self._normalize_customer_id(raw_customer_id)
@@ -79,6 +88,55 @@ class CustomerService:
             if c.get("customer_id") == customer_id:
                 return CustomerMapper.from_dict(c)
         return None
+
+    def print_customers_report(self) -> None:
+        clientes = self.list_customers()
+
+        if not clientes:
+            print("\nNo hay clientes registrados.\n")
+            return
+
+        widths = {
+            "id": 6,
+            "name": 20,
+            "phone": 15,
+            "email": 30,
+            "address": 30,
+            "benefits": 45,
+        }
+
+        def _truncate(text: str, max_len: int) -> str:
+            text = "" if text is None else str(text)
+            return text if len(text) <= max_len else text[: max_len - 3] + "..."
+
+        total_width = sum(widths.values()) + 5
+
+        print("\n" + "=" * total_width)
+        print("LISTADO DE CLIENTES".center(total_width))
+        print("=" * total_width)
+
+        print(
+            f"{'ID':<{widths['id']}} "
+            f"{'Nombre':<{widths['name']}} "
+            f"{'Teléfono':<{widths['phone']}} "
+            f"{'Email':<{widths['email']}} "
+            f"{'Dirección':<{widths['address']}} "
+            f"{'Beneficios':<{widths['benefits']}}"
+        )
+
+        print("-" * total_width)
+
+        for c in clientes:
+            print(
+                f"{_truncate(c.customer_id, widths['id']):<{widths['id']}} "
+                f"{_truncate(c.name, widths['name']):<{widths['name']}} "
+                f"{_truncate(c.phone, widths['phone']):<{widths['phone']}} "
+                f"{_truncate(c.email, widths['email']):<{widths['email']}} "
+                f"{_truncate(c.address, widths['address']):<{widths['address']}} "
+                f"{_truncate(c.get_benefits(), widths['benefits']):<{widths['benefits']}}"
+            )
+
+        print("=" * total_width + "\n")
 
     def create_customer(self, customer_type: str, name: str, email: str, phone: str, address: str):
         data = self.storage.load()
@@ -128,12 +186,3 @@ class CustomerService:
         data["customers"].pop(idx)
         self.storage.save(data)
         return True
-
-    def _find_index_by_id(self, customers_list: list, customer_id: int):
-        if not isinstance(customer_id, int) or customer_id <= 0:
-            raise ValidationError("ID inválido.")
-
-        for i, c in enumerate(customers_list):
-            if c.get("customer_id") == customer_id:
-                return i
-        return None

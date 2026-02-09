@@ -70,23 +70,26 @@ class Menu:
 
     def _list_customers(self):
         try:
-            customers = self.service.list_customers()
-            if not customers:
-                print("No hay clientes registrados.")
-                self.logger.info("LIST | sin registros")
-                return
-
-            print("\n--- Clientes ---")
-            for c in customers:
-                print(f"- {c} | Beneficios: {c.get_benefits()}")
-            self.logger.info(f"LIST | total={len(customers)}")
-
+            self.service.print_customers_report()
+            self.logger.info("LIST_REPORT | listado en formato reporte")
         except DataAccessError as e:
             print(f"Error de persistencia: {e}")
             self.logger.error(f"DATA_ACCESS_ERROR_LIST | {e}")
+            
 
     def _update_customer(self):
         try:
+            # Si no hay clientes, no editar
+            customers = self.service.list_customers()
+            if not customers:
+                print("No hay clientes para editar.")
+                self.logger.info("UPDATE_ABORT | no customers")
+                return
+            
+            # Mostrar listado actual ANTES de pedir ID
+            self.service.print_customers_report()
+            self.logger.info("LIST_REPORT_BEFORE_UPDATE | listado mostrado antes de editar")
+
             raw_id = input("ID del cliente a editar: ").strip()
 
             # Validar existencia antes de pedir más datos
@@ -131,8 +134,13 @@ class Menu:
             print(f"Error de persistencia: {e}")
             self.logger.error(f"DATA_ACCESS_ERROR_UPDATE | {e}")
 
+
     def _delete_customer(self):
         try:
+            # 1) Mostrar listado actual ANTES de pedir ID
+            self.service.print_customers_report()
+            self.logger.info("LIST_REPORT_BEFORE_DELETE | listado mostrado antes de eliminar")
+
             raw_id = input("ID del cliente a eliminar: ").strip()
 
             # Validar existencia antes de eliminar
