@@ -73,6 +73,8 @@ Principales decisiones:
 - Persistencia basada en archivos JSON para priorizar simplicidad y portabilidad.
 - Implementación de un **reporte tabular por consola** centralizado en la capa de servicio (`CustomerService`), con el objetivo de reutilizar la lógica de presentación y evitar duplicación de código en la capa de interfaz.
 - Separación clara entre la interfaz de usuario y la lógica de negocio, manteniendo en el servicio únicamente lógica de normalización necesaria para la validación de entradas provenientes de la UI.
+- En el diagrama de clases se incluye una clase conceptual App, que representa el punto de entrada de la aplicación y la orquestación de sus componentes principales.
+En la implementación, este rol se materializa mediante la función main() (composition root), sin una clase explícita App, decisión intencional y habitual en aplicaciones Python de este tamaño.
 
 Estas decisiones permiten un sistema mantenible, extensible y fácil de comprender.
 
