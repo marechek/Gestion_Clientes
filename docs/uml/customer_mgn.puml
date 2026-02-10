@@ -112,7 +112,7 @@ CustomerService o-- CustomerJsonStorage : has-a
 ' Services (Technical)
 ' =====================
 class LoggerService {
-  + setup(log_file: str = "logs/app.log") : Logger
+  + setup(log_file: str = "logs/service.log") : Logger
 }
 
 ' =====================
@@ -120,7 +120,7 @@ class LoggerService {
 ' =====================
 class Menu {
   + service : CustomerService
-  + logger : LoggerService
+  + logger : Logger
   + __init__(**kwargs)
   + run() : void
   - _print_menu() : void
