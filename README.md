@@ -56,7 +56,10 @@ Las clases `RegularCustomer`, `PremiumCustomer` y `CorporateCustomer` heredan de
 Todas las subclases implementan el método `get_benefits()`, retornando beneficios distintos según el tipo de cliente, permitiendo tratar todos los clientes de forma uniforme desde el sistema.
 
 ### Abstracción
-La clase `Customer` es una **clase abstracta**, que define el comportamiento común y el contrato que deben cumplir todos los tipos de clientes.  
+La clase `Customer` es una **clase abstracta**, que define el comportamiento común y el contrato que deben cumplir todos los tipos de clientes.
+
+Además, la clase base encapsula atributos comunes como identificador, nombre, datos de contacto y tipo de cliente (`customer_type`), asegurando que todas las entidades del dominio mantengan una estructura consistente.
+
 El método `get_benefits()` se declara como abstracto, obligando a que cada subclase implemente su propia lógica, permitiendo trabajar con el concepto general de “cliente” sin depender de implementaciones concretas.
 
 ---
@@ -68,7 +71,7 @@ Principales decisiones:
 - Separación clara por capas (dominio, validaciones, servicios, persistencia, UI).
 - Uso explícito de abstracción mediante clases base abstractas.
 - Persistencia basada en archivos JSON para priorizar simplicidad y portabilidad.
-- Implementación de un **reporte tabular por consola** en la capa de servicio (`CustomerService`), delegando la presentación a un único punto y evitando lógica condicional en la UI.
+- Implementación de un **reporte tabular por consola** centralizado en la capa de servicio (`CustomerService`), con el objetivo de reutilizar la lógica de presentación y evitar duplicación de código en la capa de interfaz.
 - Separación clara entre la interfaz de usuario y la lógica de negocio, manteniendo en el servicio únicamente lógica de normalización necesaria para la validación de entradas provenientes de la UI.
 
 Estas decisiones permiten un sistema mantenible, extensible y fácil de comprender.
@@ -178,6 +181,7 @@ El diagrama UML del proyecto representa **fielmente la implementación actual de
 - `Customer` se modela como clase abstracta que define el contrato común.
 - Las dependencias y asociaciones se ajustan al flujo real del sistema.
 - El *composition root* se encuentra en `main.py`, donde se instancian y conectan las dependencias principales (`AppLogger`, `CustomerJsonStorage`, `CustomerService` y `Menu`).
+- El atributo `customer_type` se modela explícitamente como parte de la entidad `Customer`, reflejando el tipo concreto de cliente instanciado en tiempo de ejecución.
 
 El objetivo del UML no es proponer un diseño teórico, sino documentar el estado real y funcional del sistema.
 

@@ -89,7 +89,7 @@ class CustomerService:
                 return CustomerMapper.from_dict(c)
         return None
 
-    def print_customers_report(self) -> None:
+    def print_console_report(self) -> None:
         clientes = self.list_customers()
 
         if not clientes:

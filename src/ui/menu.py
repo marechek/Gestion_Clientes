@@ -70,7 +70,7 @@ class Menu:
 
     def _list_customers(self):
         try:
-            self.service.print_customers_report()
+            self.service.print_console_report()
             self.logger.info("LIST_REPORT | listado en formato reporte")
         except DataAccessError as e:
             print(f"Error de persistencia: {e}")
@@ -87,7 +87,7 @@ class Menu:
                 return
             
             # Mostrar listado actual ANTES de pedir ID
-            self.service.print_customers_report()
+            self.service.print_console_report()
             self.logger.info("LIST_REPORT_BEFORE_UPDATE | listado mostrado antes de editar")
 
             raw_id = input("ID del cliente a editar: ").strip()
@@ -138,7 +138,7 @@ class Menu:
     def _delete_customer(self):
         try:
             # 1) Mostrar listado actual ANTES de pedir ID
-            self.service.print_customers_report()
+            self.service.print_console_report()
             self.logger.info("LIST_REPORT_BEFORE_DELETE | listado mostrado antes de eliminar")
 
             raw_id = input("ID del cliente a eliminar: ").strip()

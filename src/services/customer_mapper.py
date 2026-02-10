@@ -18,7 +18,6 @@ class CustomerMapper:
             "email": customer.email,
             "phone": customer.phone,
             "address": customer.address,
-            "active": getattr(customer, "active", True),
         }
 
     
@@ -39,7 +38,6 @@ class CustomerMapper:
             email=data.get("email"),
             phone=data.get("phone"),
             address=data.get("address"),
-            active=data.get("active", True),
         )
 
 

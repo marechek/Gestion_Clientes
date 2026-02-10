@@ -17,6 +17,15 @@ def test_customer_is_abstract():
             address="Av. Siempre Viva 123",
         )
 
+def test_customer_type_default():
+    c = RegularCustomer(
+        customer_id=1,
+        name="Test",
+        email="test@test.com",
+        phone="12345678",
+        address="Direccion valida"
+    )
+    assert c.customer_type == "regular"
 
 def test_create_valid_customer():
     customer = RegularCustomer(
