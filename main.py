@@ -5,7 +5,7 @@ from src.services.logger_service import LoggerService
 
 
 def main():
-    logger = LoggerService.setup("logs/app.log")
+    logger = LoggerService.setup("logs/service.log")
 
     storage = CustomerJsonStorage("data/customers.json")
     service = CustomerService(storage)

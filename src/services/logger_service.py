@@ -4,7 +4,7 @@ from pathlib import Path
 
 class LoggerService:
     @staticmethod
-    def setup(log_file: str = "logs/app.log") -> logging.Logger:
+    def setup(log_file: str = "logs/service.log") -> logging.Logger:
         Path(log_file).parent.mkdir(parents=True, exist_ok=True)
 
         logger = logging.getLogger("customer_app")

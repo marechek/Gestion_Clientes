@@ -92,7 +92,7 @@ El sistema utiliza **archivos JSON** como mecanismo de persistencia principal.
 ## Registro de actividad (Logging)
 Las operaciones del sistema generan registros en archivos de log mediante un **servicio técnico de logging (`LoggerService`)**, el cual encapsula la configuración y uso del logger estándar de Python y es utilizado de forma transversal por la aplicación.
 
-- Archivo: `logs/app.log`
+- Archivo: `logs/service.log`
 - Se registran:
   - Creación, edición y eliminación de clientes
   - Listados de clientes
