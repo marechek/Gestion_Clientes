@@ -8,13 +8,6 @@ class CustomerJsonStorage:
         self.file_path = Path(file_path)
 
     def load(self) -> dict:
-        """
-        Estructura esperada:
-        {
-          "last_id": 0,
-          "customers": [ ... ]
-        }
-        """
         if not self.file_path.exists():
             return {"last_id": 0, "customers": []}
 

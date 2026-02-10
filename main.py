@@ -1,11 +1,11 @@
 from src.persistence.customer_json_storage import CustomerJsonStorage
 from src.services.customer_service import CustomerService
 from src.ui.menu import Menu
-from src.utils.logger import AppLogger
+from src.services.logger_service import LoggerService
 
 
 def main():
-    logger = AppLogger.setup("logs/app.log")
+    logger = LoggerService.setup("logs/app.log")
 
     storage = CustomerJsonStorage("data/customers.json")
     service = CustomerService(storage)

@@ -90,7 +90,7 @@ El sistema utiliza **archivos JSON** como mecanismo de persistencia principal.
 ---
 
 ## Registro de actividad (Logging)
-Las operaciones del sistema generan registros en archivos de log.
+Las operaciones del sistema generan registros en archivos de log mediante un **servicio técnico de logging (`LoggerService`)**, el cual encapsula la configuración y uso del logger estándar de Python y es utilizado de forma transversal por la aplicación.
 
 - Archivo: `logs/app.log`
 - Se registran:
@@ -123,18 +123,18 @@ gestion_clientes/
 │ │ └── customer_validator.py
 │ │
 │ ├── persistence/
-│ │ ├── customer_json_storage.py
+│ │ └── customer_json_storage.py
 │ │
 │ ├── services/
 │ │ ├── customer_service.py
-│ │ └── customer_mapper.py
+│ │ ├── customer_mapper.py
+│ │ └── logger_service.py
 │ │
 │ ├── ui/
 │ │ └── menu.py
 │ │
 │ └── utils/
-│ ├── exceptions.py
-│ └── logger.py
+│   └── exceptions.py
 │
 ├── tests/
 │ ├── test_domain_customer.py
@@ -164,9 +164,9 @@ gestion_clientes/
 - **domain/**: entidades del negocio (clase Cliente + subclases).
 - **validators/**: validaciones (email, teléfono, dirección).
 - **persistence/**: persistencia JSON.
-- **services/**: lógica de negocio (orquesta validación + repositorio).
+- **services/**: lógica de negocio y servicios técnicos (incluye `LoggerService`).
 - **ui/**: menú/consola (interacción con usuario).
-- **utils/**: excepciones custom + logging.
+- **utils/**: excepciones personalizadas del sistema.
 
 ---
 
@@ -180,7 +180,7 @@ El diagrama UML del proyecto representa **fielmente la implementación actual de
 - El UML refleja las clases, métodos y relaciones realmente implementadas.
 - `Customer` se modela como clase abstracta que define el contrato común.
 - Las dependencias y asociaciones se ajustan al flujo real del sistema.
-- El *composition root* se encuentra en `main.py`, donde se instancian y conectan las dependencias principales (`AppLogger`, `CustomerJsonStorage`, `CustomerService` y `Menu`).
+- El *composition root* se encuentra en `main.py`, donde se instancian y conectan las dependencias principales (`LoggerService`, `CustomerJsonStorage`, `CustomerService` y `Menu`).
 - El atributo `customer_type` se modela explícitamente como parte de la entidad `Customer`, reflejando el tipo concreto de cliente instanciado en tiempo de ejecución.
 
 El objetivo del UML no es proponer un diseño teórico, sino documentar el estado real y funcional del sistema.

@@ -54,13 +54,6 @@ class CustomerValidator {
 }
 
 ' =====================
-' Logging
-' =====================
-class AppLogger {
-  + setup(log_file: str = "logs/app.log") : Logger
-}
-
-' =====================
 ' Errors / Exceptions
 ' =====================
 class AppError
@@ -116,11 +109,18 @@ CustomerService ..> CustomerMapper : uses
 CustomerService o-- CustomerJsonStorage : has-a
 
 ' =====================
+' Services (Technical)
+' =====================
+class LoggerService {
+  + setup(log_file: str = "logs/app.log") : Logger
+}
+
+' =====================
 ' UI
 ' =====================
 class Menu {
   + service : CustomerService
-  + logger : Logger
+  + logger : LoggerService
   + __init__(**kwargs)
   + run() : void
   - _print_menu() : void
@@ -130,6 +130,7 @@ class Menu {
 }
 
 Menu ..> CustomerService : uses
+Menu ..> LoggerService : uses
 
 ' =====================
 ' Composition Root (main.py)
@@ -138,11 +139,10 @@ class App {
   + main() : void
 }
 
-App ..> AppLogger : uses
+App ..> LoggerService : uses
 App ..> CustomerJsonStorage : creates
 App ..> CustomerService : creates
 App ..> Menu : creates
-App ..> Logger : uses
 
 @enduml
 
